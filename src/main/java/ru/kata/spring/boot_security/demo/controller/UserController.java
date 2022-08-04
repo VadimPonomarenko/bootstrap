@@ -36,9 +36,15 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String showUsers(Model model) {
+    public String showUsers(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        List<User> users = new ArrayList<>();
+        users.add(user);
         List<User> allUsers = userService.findAll();
+        model.addAttribute("roles", getRolesList());
+        model.addAttribute("newUser", new User());
         model.addAttribute("allUsers", allUsers);
+        model.addAttribute("user", user);
         return "users";
     }
 
@@ -82,6 +88,7 @@ public class UserController {
         List<User> users = new ArrayList<>();
         users.add(user);
         model.addAttribute("users", users);
+        model.addAttribute("user", user);
         return "user";
     }
 }
